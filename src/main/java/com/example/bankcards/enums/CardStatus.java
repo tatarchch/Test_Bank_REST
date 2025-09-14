@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CardStatus {
 
-    ACTIVE("active"),
-    BLOCKED("blocked"),
-    EXPIRED("expired");
+    ACTIVE("ACTIVE"),
+    BLOCKED("BLOCKED"),
+    EXPIRED("EXPIRED");
 
-    private final String status;
-
+    public final String string;
 }

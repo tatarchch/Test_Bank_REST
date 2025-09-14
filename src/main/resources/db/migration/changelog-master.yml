@@ -1,12 +1,7 @@
 databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+
   - includeAll:
-        path: db/migration/changes/
-  #- include:
-      #file: changes/001-initial-schema.sql
-      #relativeToChangelogFile: true
-  #- include:
-      #file: changes/002-add-tables.sql
-      #relativeToChangelogFile: true
-  #- include:
-      #file: changes/003-add-test-data.sql
-      #relativeToChangelogFile: true
+      path: db/migration/changes/

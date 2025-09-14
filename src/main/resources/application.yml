@@ -1,12 +1,15 @@
+server:
+  port: 8080
+
 spring:
 
   application:
     name: Test_Bank_REST
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/{DB_NAME}
-    username: {DB_USER}
-    password: {DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/TestBank
+    username: tatar
+    password: nfnfh15277
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -14,15 +17,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        ddl-auto: validate
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default-schema: dev
         format-sql: true
-
-    hibernate:
-      ddl-auto: validate
-
-  server:
-    port: 8080
-
-
-

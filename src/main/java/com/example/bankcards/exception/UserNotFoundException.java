@@ -1,7 +1,5 @@
 package com.example.bankcards.exception;
 
-import com.example.bankcards.dto.UserDto;
-
 public class UserNotFoundException extends RuntimeException {
 
     public UserNotFoundException(Long id) {

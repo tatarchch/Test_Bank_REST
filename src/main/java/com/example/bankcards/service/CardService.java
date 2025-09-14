@@ -13,6 +13,7 @@ import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,12 +35,6 @@ public class CardService {
                 .map(mapper::toDto)
                 .toList();
     }
-
-    /*public List<CardDto> getAllCardsWithMask() {
-        return repository.findAll().stream()
-                .map(mapper::toDtoWithMask)
-                .toList();
-    }*/
 
     public CardDto getCardById(Long id) {
         return repository.findById(id)
@@ -65,6 +60,7 @@ public class CardService {
                 .orElseThrow(CardNotFoundException::new);
     }
 
+    @Transactional
     public CardDto createNewCard(CardDto cardDto) {
         return Optional.of(cardDto)
                 .map(mapper::toEntity)
@@ -73,18 +69,20 @@ public class CardService {
                 .orElseThrow(OtherException::new);
     }
 
+    @Transactional
     public void deleteCardById(Long id) {
         repository.delete(repository.findById(id)
                 .filter(card -> card.getExpireDate().isAfter(LocalDate.now()))
                 .orElseThrow(OtherException::new));
     }
 
+    @Transactional
     public CardDto activeCard(CardDto cardDto) {
         return Optional.of(cardDto)
                 .filter(cardDto1 -> cardDto1.getExpireDate().isAfter(LocalDate.now()))
-                .filter(cardDto1 -> !cardDto1.getStatus().equals(CardStatus.ACTIVE.getStatus()))
+                .filter(cardDto1 -> !cardDto1.getStatus().equals(CardStatus.ACTIVE.getString()))
                 .map(cardDto1 -> {
-                    cardDto1.setStatus(CardStatus.ACTIVE.getStatus());
+                    cardDto1.setStatus(CardStatus.ACTIVE.getString());
                     return cardDto1;
                 })
                 .map(mapper::toEntity)
@@ -93,12 +91,13 @@ public class CardService {
                 .orElseThrow(CardNotFoundException::new);
     }
 
+    @Transactional
     public CardDto blockCard(CardDto cardDto) {
         return Optional.of(cardDto)
                 .filter(cardDto1 -> cardDto1.getExpireDate().isAfter(LocalDate.now()))
-                .filter(cardDto1 -> !cardDto1.getStatus().equals(CardStatus.BLOCKED.getStatus()))
+                .filter(cardDto1 -> !cardDto1.getStatus().equals(CardStatus.BLOCKED.getString()))
                 .map(cardDto1 -> {
-                    cardDto1.setStatus(CardStatus.BLOCKED.getStatus());
+                    cardDto1.setStatus(CardStatus.BLOCKED.getString());
                     return cardDto1;
                 })
                 .map(mapper::toEntity)
@@ -113,6 +112,7 @@ public class CardService {
                 .toList();
     }
 
+    @Transactional
     public void transferBetweenCards(Long fromCardId, Long toCardId, BigDecimal amount, Long userId) {
 
         Card fromCard = repository.findById(fromCardId)
@@ -129,11 +129,11 @@ public class CardService {
             throw new OperationNotAllowedException("Сумма перевода должна быть положительной");
         }
 
-        if (!fromCard.getStatus().equals(CardStatus.ACTIVE.getStatus())) {
+        if (!fromCard.getStatus().equals(CardStatus.ACTIVE)) {
             throw new OperationNotAllowedException("Карта неактивна");
         }
 
-        if (fromCard.getExpireDate().isBefore(java.time.LocalDate.now())) {
+        if (fromCard.getExpireDate().isBefore(LocalDate.now())) {
             throw new OperationNotAllowedException("Карта просрочена");
         }
 
@@ -141,11 +141,11 @@ public class CardService {
             throw new OperationNotAllowedException("Недостаточно средств");
         }
 
-        if (!toCard.getStatus().equals(CardStatus.ACTIVE.getStatus())) {
+        if (!toCard.getStatus().equals(CardStatus.ACTIVE)) {
             throw new OperationNotAllowedException("Карта неактивна");
         }
 
-        if (toCard.getExpireDate().isBefore(java.time.LocalDate.now())) {
+        if (toCard.getExpireDate().isBefore(LocalDate.now())) {
             throw new OperationNotAllowedException("Карта просрочена");
         }
 
@@ -165,6 +165,7 @@ public class CardService {
                 .orElseThrow(CardNotFoundException::new);
     }
 
+    @Transactional
     public void setOwner(CardDto cardDto, Long ownerId) {
         Optional.of(cardDto)
                 .map(mapper::toEntity)
