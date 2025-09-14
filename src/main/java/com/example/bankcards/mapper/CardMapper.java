@@ -1,11 +1,8 @@
 package com.example.bankcards.mapper;
 
 import com.example.bankcards.dto.CardDto;
-import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.Card;
-import com.example.bankcards.entity.User;
 import com.example.bankcards.util.EncryptionUtils;
-import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

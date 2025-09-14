@@ -9,6 +9,7 @@ import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(username, password));
     }
 
+    @Transactional
     public UserDto addNewUser(UserDto userDto) {
         return Optional.of(userDto)
                 .map(UserDto::getUsername)
@@ -59,10 +61,12 @@ public class UserService {
                 .orElseThrow(() -> new UserAlreadyExistsException(userDto));
     }
 
+    @Transactional
     public void deleteUser(UserDto userDto) {
         repository.delete(mapper.toEntity(userDto));
     }
 
+    @Transactional
     public void deleteUserById(Long id) {
         repository.deleteById(id);
     }

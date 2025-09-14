@@ -23,14 +23,15 @@ public class Card {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "card_number", nullable = false, length = 19)
+    @Column(name = "card_number", nullable = false, length = 19, unique = true)
     private String cardNumber;
 
     @Column(name = "expire_date")
     private LocalDate expireDate = LocalDate.now().plusYears(4);
 
     @Column(name = "status", nullable = false)
-    private String status = CardStatus.ACTIVE.getStatus();
+    @Enumerated(EnumType.STRING)
+    private CardStatus status = CardStatus.ACTIVE;
 
     @Column(name = "balance", nullable = false)
     @PositiveOrZero

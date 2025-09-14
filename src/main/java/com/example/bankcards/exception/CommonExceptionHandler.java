@@ -81,7 +81,6 @@ public class CommonExceptionHandler {
             case ADMIN_CONTROLLER -> new ResponseError( "Ошибка сохранения в классе администратора");
             case CARD_CONTROLLER -> new ResponseError( "Ошибка сохранения в классе карт");
             case USER_CONTROLLER -> new ResponseError("Ошибка сохранения в классе пользователей");
-            default -> new ResponseError(new OtherException().getMessage());
         };
     }
 

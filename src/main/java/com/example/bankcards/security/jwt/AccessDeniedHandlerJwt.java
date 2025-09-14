@@ -2,7 +2,6 @@ package com.example.bankcards.security.jwt;
 
 import com.example.bankcards.exception.ResponseError;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ public class AccessDeniedHandlerJwt implements AccessDeniedHandler {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         log.error(String.format("Недостаточно прав пользователя '%s' для вызова метода '%s'. Доступ запрещён",
                 SecurityContextHolder.getContext().getAuthentication().getName(),
                 request.getRequestURI())

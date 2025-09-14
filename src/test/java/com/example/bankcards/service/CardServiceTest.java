@@ -54,7 +54,6 @@ public class CardServiceTest {
         testCard = new Card();
         testCard.setId(1L);
         testCard.setCardNumber("encryptedCardNumber");
-        testCard.setStatus(CardStatus.ACTIVE.getStatus());
         testCard.setExpireDate(LocalDate.now().plusYears(2));
         testCard.setBalance(BigDecimal.valueOf(1000));
         testCard.setOwner(testUser);
@@ -62,7 +61,7 @@ public class CardServiceTest {
         testCardDto = new CardDto();
         testCardDto.setId(1L);
         testCardDto.setCardNumber("decryptedCardNumber");
-        testCardDto.setStatus(CardStatus.ACTIVE.getStatus());
+        testCardDto.setStatus(CardStatus.ACTIVE.getString());
         testCardDto.setExpireDate(LocalDate.now().plusYears(2));
         testCardDto.setBalance(BigDecimal.valueOf(1000));
     }
@@ -153,12 +152,12 @@ public class CardServiceTest {
 
     @Test
     void activeCardShouldActivateCard_WhenConditionsMet() {
-        testCardDto.setStatus(CardStatus.BLOCKED.getStatus());
+        testCardDto.setStatus(CardStatus.BLOCKED.getString());
         Card activeCard = new Card();
-        activeCard.setStatus(CardStatus.ACTIVE.getStatus());
+        activeCard.setStatus(CardStatus.ACTIVE);
 
         CardDto activeCardDto = new CardDto();
-        activeCardDto.setStatus(CardStatus.ACTIVE.getStatus());
+        activeCardDto.setStatus(CardStatus.ACTIVE.getString());
 
         when(cardMapper.toEntity(testCardDto)).thenReturn(activeCard);
         when(cardRepository.save(activeCard)).thenReturn(activeCard);
@@ -167,7 +166,7 @@ public class CardServiceTest {
         CardDto result = cardService.activeCard(testCardDto);
 
         assertNotNull(result);
-        assertEquals(CardStatus.ACTIVE.getStatus(), result.getStatus());
+        assertEquals(CardStatus.ACTIVE.getString(), result.getStatus());
         verify(cardRepository, times(1)).save(any(Card.class));
     }
 
@@ -176,14 +175,14 @@ public class CardServiceTest {
         Card fromCard = new Card();
         fromCard.setId(1L);
         fromCard.setBalance(BigDecimal.valueOf(1000));
-        fromCard.setStatus(CardStatus.ACTIVE.getStatus());
+        fromCard.setStatus(CardStatus.ACTIVE);
         fromCard.setExpireDate(LocalDate.now().plusYears(1));
         fromCard.setOwner(testUser);
 
         Card toCard = new Card();
         toCard.setId(2L);
         toCard.setBalance(BigDecimal.valueOf(500));
-        toCard.setStatus(CardStatus.ACTIVE.getStatus());
+        toCard.setStatus(CardStatus.ACTIVE);
         toCard.setExpireDate(LocalDate.now().plusYears(1));
         toCard.setOwner(testUser);
 
